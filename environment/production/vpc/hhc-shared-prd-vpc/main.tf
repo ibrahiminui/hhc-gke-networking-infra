@@ -13,8 +13,8 @@ locals {
     ])
   }
 
-  subnets                     = local.loaded_data["subnets"]
-  firewall_rules              = local.loaded_data["firewall_rules"]
+  subnets        = local.loaded_data["subnets"]
+  firewall_rules = local.loaded_data["firewall_rules"]
 }
 
 module "vpc" {
@@ -22,6 +22,6 @@ module "vpc" {
 
   name = var.vpc
 
-  subnets                     = local.subnets
-  firewall_rules              = local.firewall_rules
+  subnets        = local.subnets
+  firewall_rules = local.firewall_rules
 }
