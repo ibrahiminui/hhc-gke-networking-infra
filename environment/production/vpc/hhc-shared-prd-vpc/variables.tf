@@ -1,6 +1,6 @@
 variable "vpc" {
   description = "The name of the Virtual Private Cloud (VPC) to configure."
-  default     = "hhc-shared-network-prd-vpc"
+  default     = "hhc-shared-prd-vpc"
   type        = string
 }
 
