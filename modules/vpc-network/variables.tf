@@ -20,10 +20,8 @@ variable "subnets" {
       subnet_iam_admins : optional(list(string), [])
       subnet_ip : string
       subnet_private_access : bool
-      subnet_purpose : string
       subnet_region : string
-      subnet_role : string
-      subnet_users : list(string)
+
   }))
 }
 
