@@ -1,0 +1,27 @@
+{
+  "ranges": [
+    "10.99.128.0/18",
+    "10.247.128.0/18"
+  ],
+  "direction": "INGRESS",
+  "name": "allow-8080-from-prod",
+  "source_tags": null,
+  "target_service_accounts": null,
+  "deny": [],
+  "priority": null,
+  "target_tags": [
+    "local-8080"
+  ],
+  "source_service_accounts": null,
+  "allow": [
+    {
+      "protocol": "tcp",
+      "ports": [
+        8080
+      ]
+    }
+  ],
+  "log_config": {
+    "metadata": "EXCLUDE_ALL_METADATA"
+  },
+  "description": "Allows 8080 traffic internally within the VPC. "
