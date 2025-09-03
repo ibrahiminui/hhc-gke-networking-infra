@@ -1,1 +1,0 @@
-project = "dbk-global-networking"

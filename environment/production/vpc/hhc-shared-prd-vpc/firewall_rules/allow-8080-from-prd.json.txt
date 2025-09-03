@@ -25,3 +25,4 @@
     "metadata": "EXCLUDE_ALL_METADATA"
   },
   "description": "Allows 8080 traffic internally within the VPC. "
+}

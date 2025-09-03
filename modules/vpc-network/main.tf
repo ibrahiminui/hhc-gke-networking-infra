@@ -4,10 +4,10 @@ locals {
     for x in var.subnets :
     x.name => x
   }
+}
 
 
 resource "google_compute_network" "this" {
-  #checkov:skip=CKV2_GCP_18:Firewalls for these networks are specified in a manner this check doesn't support
   name    = var.name
   project = var.project
 
@@ -15,8 +15,6 @@ resource "google_compute_network" "this" {
 }
 
 resource "google_compute_subnetwork" "this" {
-  #checkov:skip=CKV_GCP_74:Unable to handle Terraform structure.
-  #checkov:skip=CKV_GCP_76:Unable to handle Terraform structure.
   provider = google-beta
   for_each = local.subnets
 

@@ -5,37 +5,10 @@ variable "name" {
 
 variable "project" {
   description = "The ID of the project in which the resource belongs."
-  default     = "dbk-global-networking"
+  default     = "hhc-global-gke"
   type        = string
 }
 
-variable "global_addresses" {
-  description = "Represents a Global Address resource."
-  type        = list(any)
-
-  default = []
-}
-
-variable "service_peerings" {
-  description = "The service peerings that are to be created as part of the VPC."
-  type        = list(any)
-
-  default = []
-}
-
-variable "vpc_peerings" {
-  description = "The vpc peerings that are to be created as part of the VPC."
-  type        = list(any)
-
-  default = []
-}
-
-variable "vpc_access_connectors" {
-  description = "The vpc access connectors that are to be created as part of the VPC."
-  type        = list(any)
-
-  default = []
-}
 
 variable "subnets" {
   description = "The subnets that are to be created as part of the VPC."
@@ -54,27 +27,12 @@ variable "subnets" {
   }))
 }
 
-variable "subnet_iam_admin_role" {
-  description = "The id of the role to use for subnetwork IAM administrative permissions (ex. projects/{{project}}/roles/{{role_id}})"
-  type        = string
-  default     = ""
-}
+
 
 variable "firewall_rules" {
   description = "List of custom rule definitions (refer to variables file for syntax)."
   type        = any
 }
 
-variable "routes" {
-  description = "List of custom route definitions"
-  type        = list(any)
 
-  default = []
-}
 
-variable "service_connection_policies" {
-  description = "List of service connection policies"
-  type        = list(any)
-
-  default = []
-}
