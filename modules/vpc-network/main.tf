@@ -9,7 +9,7 @@ locals {
 
 resource "google_compute_network" "this" {
   name    = var.name
-  project = var.project
+  project = var.project_id
 
   auto_create_subnetworks = false
 }
@@ -18,7 +18,7 @@ resource "google_compute_subnetwork" "this" {
   provider = google-beta
   for_each = local.subnets
 
-  project = var.project
+  project = var.project_id
   network = var.name
 
   name          = each.key
