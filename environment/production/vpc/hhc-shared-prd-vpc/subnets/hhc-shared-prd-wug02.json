@@ -1,6 +1,6 @@
 [
   {
-    "subnet_ip": "10.1.2.0/18",
+    "subnet_ip": "10.1.0.0/18",
     "subnet_region": "us-west2",
     "subnet_private_access": true,
     "secondary_ranges": {
