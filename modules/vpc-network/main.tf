@@ -26,8 +26,6 @@ resource "google_compute_subnetwork" "this" {
   region        = each.value.subnet_region
 
   private_ip_google_access = each.value.subnet_private_access
-  purpose                  = each.value.subnet_purpose != "" ? each.value.subnet_purpose : null
-  role                     = each.value.subnet_role != "" ? each.value.subnet_role : null
 
   dynamic "log_config" {
     for_each = lookup(each.value, "subnet_flow_logs", false) ? [{
