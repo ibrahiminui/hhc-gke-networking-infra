@@ -1,56 +1,80 @@
-locals {
-  # Generate map from subnet name
-  subnets = {
-    for x in var.subnets :
-    x.name => x
-  }
-
-
-resource "google_compute_network" "this" {
-  #checkov:skip=CKV2_GCP_18:Firewalls for these networks are specified in a manner this check doesn't support
-  name    = var.name
-  project = var.project
-
-  auto_create_subnetworks = false
+variable "name" {
+  description = "Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash."
+  type        = string
 }
 
-resource "google_compute_subnetwork" "this" {
-  #checkov:skip=CKV_GCP_74:Unable to handle Terraform structure.
-  #checkov:skip=CKV_GCP_76:Unable to handle Terraform structure.
-  provider = google-beta
-  for_each = local.subnets
+variable "project" {
+  description = "The ID of the project in which the resource belongs."
+  default     = "dbk-global-networking"
+  type        = string
+}
 
-  project = var.project
-  network = var.name
+variable "global_addresses" {
+  description = "Represents a Global Address resource."
+  type        = list(any)
 
-  name          = each.key
-  ip_cidr_range = each.value.subnet_ip
-  region        = each.value.subnet_region
+  default = []
+}
 
-  private_ip_google_access = each.value.subnet_private_access
-  purpose                  = each.value.subnet_purpose != "" ? each.value.subnet_purpose : null
-  role                     = each.value.subnet_role != "" ? each.value.subnet_role : null
+variable "service_peerings" {
+  description = "The service peerings that are to be created as part of the VPC."
+  type        = list(any)
 
-  dynamic "log_config" {
-    for_each = lookup(each.value, "subnet_flow_logs", false) ? [{
-      aggregation_interval = lookup(each.value, "subnet_flow_logs_interval", "INTERVAL_15_MIN")
-      flow_sampling        = lookup(each.value, "subnet_flow_logs_sampling", "0.1")
-      metadata             = lookup(each.value, "subnet_flow_logs_metadata", "EXCLUDE_ALL_METADATA")
-    }] : []
-    content {
-      aggregation_interval = log_config.value.aggregation_interval
-      flow_sampling        = log_config.value.flow_sampling
-      metadata             = log_config.value.metadata
-    }
-  }
+  default = []
+}
 
-  dynamic "secondary_ip_range" {
-    for_each = each.value.secondary_ranges
-    iterator = range
+variable "vpc_peerings" {
+  description = "The vpc peerings that are to be created as part of the VPC."
+  type        = list(any)
 
-    content {
-      range_name    = range.key
-      ip_cidr_range = range.value
-    }
-  }
+  default = []
+}
+
+variable "vpc_access_connectors" {
+  description = "The vpc access connectors that are to be created as part of the VPC."
+  type        = list(any)
+
+  default = []
+}
+
+variable "subnets" {
+  description = "The subnets that are to be created as part of the VPC."
+  type = list(
+    object({
+      name : string
+      secondary_ranges : map(string)
+      subnet_flow_logs : bool
+      subnet_iam_admins : optional(list(string), [])
+      subnet_ip : string
+      subnet_private_access : bool
+      subnet_purpose : string
+      subnet_region : string
+      subnet_role : string
+      subnet_users : list(string)
+  }))
+}
+
+variable "subnet_iam_admin_role" {
+  description = "The id of the role to use for subnetwork IAM administrative permissions (ex. projects/{{project}}/roles/{{role_id}})"
+  type        = string
+  default     = ""
+}
+
+variable "firewall_rules" {
+  description = "List of custom rule definitions (refer to variables file for syntax)."
+  type        = any
+}
+
+variable "routes" {
+  description = "List of custom route definitions"
+  type        = list(any)
+
+  default = []
+}
+
+variable "service_connection_policies" {
+  description = "List of service connection policies"
+  type        = list(any)
+
+  default = []
 }
