@@ -31,7 +31,7 @@ jobs:
     # This is your stack root
     defaults:
       run:
-        working-directory: environment/production/vpc/hhc-shared-prd-vpc
+        working-directory: environment/production
 
     env:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}        # your target project
