@@ -158,9 +158,3 @@ variable "dependencies" {
   description = "variable reference from other dependency module. Means this module will start creating resource after dependent module was completed."
   default     = []
 }
-
-variable "monitoring_components" {
-  description = "List of components to enable in monitoring_config"
-  type        = list(string)
-  default     = ["SYSTEM_COMPONENTS", "APISERVER", "CONTROLLER_MANAGER", "SCHEDULER", "STORAGE", "HPA", "POD", "DAEMONSET", "DEPLOYMENT", "STATEFULSET", "CADVISOR", "KUBELET"]
-}

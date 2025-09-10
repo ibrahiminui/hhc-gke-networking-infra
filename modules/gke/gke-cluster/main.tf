@@ -44,10 +44,6 @@ resource "google_container_cluster" "cluster" {
     }
   }
 
-  monitoring_config {
-    enable_components = var.monitoring_components
-  }
-
   # enables RBAC with Google Groups
   dynamic "authenticator_groups_config" {
     for_each = lookup(var.gke_cluster[count.index], "authenticator_groups_config_enabled", var.default_gke_cluster["authenticator_groups_config_enabled"]) ? ["true"] : []
@@ -174,31 +170,3 @@ resource "null_resource" "dependency_resource" {
   }
 }
 
-resource "google_gke_backup_backup_plan" "cluster-backup-terraform" {
-  count = length(var.gke_cluster)
-  #The %s-%s means substites the string1 and string2 mentioned in the format syntax e.g in this scenario it is the output of the lookup command and the backup string with a hyphen in between.
-  #This is the name of the backup plan.
-  name     = format("%s-%s", lookup(var.gke_cluster[count.index], "name"), "backup")
-  project  = var.project_id
-  location = var.region
-  cluster  = "projects/${var.project_id}/locations/${var.region}/clusters/${format("%s%s", lookup(var.gke_cluster[count.index], "name"), var.suffix)}"
-  retention_policy {
-    # backup_delete_lock_days :A Backup created under this BackupPlan will not be deletable until it reaches Backup's (create time + backup_delete_lock_days). 
-    backup_delete_lock_days = 1
-    # backup_retain_days: Backup created under this BackupPlan will be automatically deleted after its age reaches (createTime + backupRetainDays).
-    backup_retain_days = 14
-  }
-  backup_schedule {
-    # paused: This flag denotes whether automatic Backup creation is paused for this BackupPlan.
-    #paused = true
-    rpo_config {
-      # target_rpo_minutes: Defines the target RPO for the BackupPlan in minutes
-      target_rpo_minutes = 60
-    }
-  }
-  backup_config {
-    include_volume_data = true
-    include_secrets     = true
-    all_namespaces      = true
-  }
-}
