@@ -4,7 +4,6 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      project = var.project_id
       version = ">= 5.0"
     }
   }
