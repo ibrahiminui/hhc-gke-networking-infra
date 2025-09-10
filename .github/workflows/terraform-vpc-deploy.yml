@@ -35,8 +35,6 @@ jobs:
 
     env:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}        # your target project
-      TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}  # your Terraform state bucket
-      TF_BACKEND_PREFIX: "state/production/vpc/hhc-shared-prd-vpc"
 
     steps:
       - uses: actions/checkout@v4
@@ -58,10 +56,7 @@ jobs:
 
       # Keep backend.tf minimal in repo: terraform { backend "gcs" {} }
       - name: Terraform Init (GCS backend)
-        run: |
-          terraform init \
-            -backend-config="bucket=${TF_STATE_BUCKET}" \
-            -backend-config="prefix=${TF_BACKEND_PREFIX}"
+        run: terraform init 
 
       - name: Terraform Validate
         run: terraform validate
