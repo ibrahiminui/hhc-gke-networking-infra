@@ -17,6 +17,7 @@ resource "google_container_cluster" "cluster" {
   monitoring_service          = lookup(var.gke_cluster[count.index], "monitoring_service", var.default_gke_cluster["monitoring_service"])
   networking_mode             = "VPC_NATIVE"
   remove_default_node_pool    = true
+  deletion_protection         = false
   initial_node_count          = 1
   min_master_version          = lookup(var.gke_cluster[count.index], "min_master_version", var.default_gke_cluster["min_master_version"])
   enable_shielded_nodes       = lookup(var.gke_cluster[count.index], "enable_shielded_nodes", var.default_gke_cluster["enable_shielded_nodes"])
