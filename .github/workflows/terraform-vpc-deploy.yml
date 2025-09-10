@@ -1,6 +1,7 @@
-name: Terraform VPC Deploy
+name: Terraform VPC + GKE Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -13,23 +14,28 @@ permissions:
 env:
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
-  TF_CLI_ARGS_apply: "-auto-approve"
 
 jobs:
-  vpc:
-    name: Apply VPC (production)
+  terraform:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    # Two roots to run
+      matrix:
+        workdir:
+          - environment/production/vpc/hhc-shared-prd-vpc
+          - environment/production/gke
 
-    # This is your stack root
-    defaults:
-      run:
-        working-directory: environment/production/vpc/hhc-shared-prd-vpc
-
-    env:
-      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}        # your target project
+    name: Apply (${{ matrix.workdir }})
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Sanity
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Workdir: ${{ matrix.workdir }}"
+          echo "PWD before cd:" && pwd
 
       - name: Authenticate to GCP (Service Account JSON)
         uses: google-github-actions/auth@v2
@@ -42,28 +48,27 @@ jobs:
         with:
           terraform_version: 1.6.6
 
-      # optional: nice to have
-      - name: Terraform Format Check
+      - name: Terraform Fmt (repo)
         run: terraform fmt -check -recursive
 
-      # Keep backend.tf minimal in repo: terraform { backend "gcs" {} }
-      - name: Terraform Init (GCS backend)
-        run: terraform init 
+      - name: Terraform Init
+        run: terraform -chdir="${{ matrix.workdir }}" init -input=false
 
       - name: Terraform Validate
-        run: terraform validate
+        run: terraform -chdir="${{ matrix.workdir }}" validate
 
       - name: Terraform Plan
-        run: terraform plan -var="project_id=${PROJECT_ID}"
+        run: terraform -chdir="${{ matrix.workdir }}" plan -out=tfplan.out -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
 
+      # Optional: comment this whole step out if you don’t need artifacts
       - name: Upload plan on PRs
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: tf-plan
-          path: environment/production/vpc/hhc-shared-prd-vpc/terraform.tfplan
+          name: "tf-plan-${{ matrix.workdir }}"
+          path: "${{ matrix.workdir }}/tfplan.out"
         continue-on-error: true
 
-      - name: Terraform Apply (push to main only)
+      - name: Terraform Apply (push only)
         if: github.event_name == 'push'
-        run: terraform apply -var="project_id=${PROJECT_ID}"
+        run: terraform -chdir="${{ matrix.workdir }}" apply -input=false tfplan.out
