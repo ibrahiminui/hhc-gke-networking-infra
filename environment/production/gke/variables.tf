@@ -1,6 +1,6 @@
 variable "project_id" {
   description = "The GCP project you want to manage"
-  default = "hhc-global-gke"
+  default     = "hhc-global-gke"
   type        = string
 }
 
