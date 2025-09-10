@@ -1,10 +1,18 @@
 name: Terraform VPC Deploy
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+    paths:
+      - "environment/production/vpc/**"
+      - "modules/**"
+      - ".github/workflows/terraform-vpc-deploy.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "environment/production/vpc/**"
+      - "modules/**"
+      - ".github/workflows/terraform-vpc-deploy.yml"
 
 permissions:
   contents: read
