@@ -23,7 +23,7 @@ resource "google_compute_address" "wug02-prod" {
 
 resource "google_compute_router_nat" "hhc-global-shared-prod-nat-gateway-us-west2" {
   name    = "hhc-global-shared-prod-nat-gateway-us-west2"
-  project = "hhc-global-networking"
+  project = "hhc-global-gke"
   router  = google_compute_router.hhc-global-shared-router-prod-us-west2.name
   region  = "us-west2"
 
