@@ -33,7 +33,7 @@ module "hhc-shared-prd-wug02-gke-1-np1" {
       "machine_type"      = "e2-standard-2",
       "max_node_count"    = "3",
       "max_pods_per_node" = "48",
-      "service_account"   = module.default_nodepool_service_account.email,
+      "service_account"   = var.service_account
       "disk_size_gb"      = "20",
     },
   ]

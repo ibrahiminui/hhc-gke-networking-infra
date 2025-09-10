@@ -14,6 +14,12 @@ variable "region" {
   description = "Default Google Cloud region"
 }
 
+variable "service_account" {
+  type        = string
+  default = "736145175780-compute@developer.gserviceaccount.com"
+  description = "Default Google Cloud region"
+}
+
 variable "network_project" {
   type        = string
   description = "project id of the hosted project where network been provisioned"
