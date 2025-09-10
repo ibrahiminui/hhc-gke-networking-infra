@@ -1,18 +1,10 @@
 name: Terraform VPC Deploy
 
 on:
-  pull_request:
-    branches: ["main"]
-    paths:
-      - "environment/production/vpc/**"
-      - "modules/**"
-      - ".github/workflows/terraform-vpc-deploy.yml"
   push:
-    branches: ["main"]
-    paths:
-      - "environment/production/vpc/**"
-      - "modules/**"
-      - ".github/workflows/terraform-vpc-deploy.yml"
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -31,7 +23,7 @@ jobs:
     # This is your stack root
     defaults:
       run:
-        working-directory: environment/production
+        working-directory: environment/production/vpc/hhc-shared-prd-vpc
 
     env:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}        # your target project
