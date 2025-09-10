@@ -20,7 +20,7 @@ locals {
 module "vpc" {
   source = "../../../../modules/vpc-network"
 
-  name = var.vpc
+  name       = var.vpc
   project_id = var.project_id
 
   subnets        = local.subnets
