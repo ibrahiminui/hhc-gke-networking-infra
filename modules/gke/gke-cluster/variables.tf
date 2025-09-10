@@ -1,4 +1,4 @@
-variable "project" {
+variable "project_id" {
   type        = string
   description = "Google Cloud project name"
 }
@@ -11,7 +11,7 @@ variable "region" {
 variable "network_project" {
   type        = string
   description = "project id of the hosted project where network been provisioned"
-  default     = "dbk-global-networking"
+  default     = "hhc-global-gke"
 }
 
 variable "network" {
