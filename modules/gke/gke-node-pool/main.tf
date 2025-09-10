@@ -8,7 +8,7 @@ resource "google_container_node_pool" "node_pool" {
   count    = length(var.node_pool)
   name     = format("%s%s", lookup(var.node_pool[count.index], "name", var.default_node_pool["name"]), var.suffix)
   location = var.region
-  project  = var.project
+  project  = var.project_id
   cluster  = element(var.cluster_name, count.index)
   version  = lookup(var.node_pool[count.index], "version", var.default_node_pool["version"])
 

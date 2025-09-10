@@ -1,16 +1,12 @@
 variable "project_id" {
   description = "The GCP project you want to manage"
+  default = "hhc-global-gke"
   type        = string
 }
 
 variable "environment" {
   description = "Which environment is being configured."
   type        = string
-}
-
-variable "project_id" {
-  type        = string
-  description = "Google Cloud project name"
 }
 
 variable "region" {

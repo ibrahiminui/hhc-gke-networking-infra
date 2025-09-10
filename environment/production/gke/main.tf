@@ -1,8 +1,8 @@
 
 module "hhc-shared-prd-wug02-gke-1" {
-  source = "../../../modules/gke-cluster"
+  source = "../../../modules/gke/gke-cluster"
 
-  project = var.project_id
+  project_id = var.project_id
   region  = "us-west2"
 
   network    = "hhc-shared-prd-vpc"
@@ -22,8 +22,8 @@ module "hhc-shared-prd-wug02-gke-1" {
 }
 
 module "hhc-shared-prd-wug02-gke-1-np1" {
-  source       = "../../../modules/gke-node-pool"
-  project      = var.project_id
+  source       = "../../../modules/gke/gke-node-pool"
+  project_id      = var.project_id
   region       = "us-west2"
   cluster_name = module.hhc-shared-prd-wug02-gke-1.gke-name
   oauth_scopes = ["https://www.googleapis.com/auth/devstorage.read_only", "https://www.googleapis.com/auth/logging.write", "https://www.googleapis.com/auth/monitoring"]
