@@ -1,4 +1,4 @@
-name: Terraform VPC + GKE Deploy
+name: Terraform VPC Deploy
 
 on:
   push:
@@ -16,23 +16,17 @@ env:
   TF_CLI_ARGS_apply: "-auto-approve"
 
 jobs:
-  terraform:
+  vpc:
+    name: Apply VPC (production)
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        workdir:
-          - environment/production/vpc/hhc-shared-prd-vpc
-          - environment/production/gke
 
-    name: Apply (${{ matrix.workdir }})
-
+    # This is your stack root
     defaults:
       run:
-        working-directory: ${{ matrix.workdir }}
+        working-directory: environment/production/vpc/hhc-shared-prd-vpc
 
     env:
-      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}        # your target project
 
     steps:
       - uses: actions/checkout@v4
@@ -48,26 +42,28 @@ jobs:
         with:
           terraform_version: 1.6.6
 
+      # optional: nice to have
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
 
+      # Keep backend.tf minimal in repo: terraform { backend "gcs" {} }
       - name: Terraform Init (GCS backend)
-        run: terraform init
+        run: terraform init 
 
       - name: Terraform Validate
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var="project_id=${PROJECT_ID}" -out=tfplan.out
+        run: terraform plan -var="project_id=${PROJECT_ID}"
 
       - name: Upload plan on PRs
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: tf-plan-${{ matrix.workdir##*/ }}
-          path: ${{ matrix.workdir }}/tfplan.out
+          name: tf-plan
+          path: environment/production/vpc/hhc-shared-prd-vpc/terraform.tfplan
         continue-on-error: true
 
       - name: Terraform Apply (push to main only)
         if: github.event_name == 'push'
-        run: terraform apply -var="project_id=${PROJECT_ID}" -auto-approve tfplan.out
+        run: terraform apply -var="project_id=${PROJECT_ID}"
