@@ -1,3 +1,5 @@
 project_id = "hhc-global-gke"
-
 environment = "prd"
+region = "us-west2"
+network ="hhc-shared-prd-vpc"
+subnetwork = "hhc-shared-prd-wug02"
