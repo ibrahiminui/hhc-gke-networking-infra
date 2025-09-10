@@ -16,7 +16,7 @@ variable "region" {
 
 variable "service_account" {
   type        = string
-  default     = "736145175780-compute@developer.gserviceaccount.com"
+  default = "736145175780-compute@developer.gserviceaccount.com"
   description = "Default Google Cloud region"
 }
 
