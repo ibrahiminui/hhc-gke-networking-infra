@@ -10,16 +10,6 @@ resource "google_compute_router" "hhc-global-shared-router-prod-us-west2" {
   }
 }
 
-/**
-
-resource "google_compute_address" "wug02-prod" {
-  count   = 8
-  name    = "nat-manual-wug02-prod-${count.index}"
-  project = "hhc-global-networking"
-  region  = "us-west2"
-}
-
-**/
 
 resource "google_compute_router_nat" "hhc-global-shared-prod-nat-gateway-us-west2" {
   name    = "hhc-global-shared-prod-nat-gateway-us-west2"
