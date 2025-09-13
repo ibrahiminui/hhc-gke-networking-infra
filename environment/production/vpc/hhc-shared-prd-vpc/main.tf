@@ -1,4 +1,4 @@
-/**
+
 
 locals {
   data_dirs = [
@@ -28,4 +28,3 @@ module "vpc" {
   subnets        = local.subnets
   firewall_rules = local.firewall_rules
 }
-**/
