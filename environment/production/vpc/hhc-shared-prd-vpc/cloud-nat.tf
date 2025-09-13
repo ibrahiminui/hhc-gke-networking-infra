@@ -1,3 +1,5 @@
+/**
+
 resource "google_compute_router" "hhc-global-shared-router-prod-us-west2" {
   name    = "hhc-global-shared-router-prod-us-west2"
   project = var.project_id
@@ -28,3 +30,4 @@ resource "google_compute_router_nat" "hhc-global-shared-prod-nat-gateway-us-west
     filter = "ERRORS_ONLY"
   }
 }
+**/
